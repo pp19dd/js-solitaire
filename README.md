@@ -8,3 +8,4 @@ Solitaire clone in HTML / JavaScript
 * No moves warning
 * Add hint button
 * Mobile-responsive optimizations
+* Fix bug being able to click out of turn on 3 offered cards
