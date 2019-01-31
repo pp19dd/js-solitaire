@@ -1,0 +1,98 @@
+
+body { font-size: 12px; font-family: Arial; overflow: hidden }
+
+/* color schemes */
+body { background-color: #554c4d; }
+.card-column { background-color: #373737; box-shadow: 0 0 20px #373737 }
+.card { background-color: #9897a9; border:3px solid #403f4e }
+.suit-spade, .suit-club { color: #290916 }
+.suit-heart, .suit-diamond { color: #900503 }
+
+.card.suit-heart, .card.suit-diamond { border:3px solid #403f4e }
+.card.flipped { background-color: #403f4e; border:3px solid rgba(0,0,0,0.9); }
+
+/* thx s/o # 826782 */
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.game { max-width: 450px; margin: auto }
+
+.top { display: flex; }
+.nav h3 { padding: 0; margin: 0 }
+.nav { padding-bottom: 1em; color: silver }
+.nav, .options { display: flex; justify-content: space-between; align-items: flex-start; }
+.options { align-items: baseline; }
+.options a { padding-left: 1em; color: silver }
+
+
+.cards-removed { display: flex; }
+.cards-table { display: flex; margin-top: 2em }
+.cards-available-all { display: flex; }
+
+.card-column {
+    margin-right: 0.5em;
+    width:52px;
+    padding:0.25em;
+    min-height:100px;
+}
+
+.card {
+    position: relative;
+    width:42px;
+    height:64px;
+    border-radius: 0.5em;
+    /*outline: double white;*/
+    text-align: center;
+    font-size: 3em;
+    padding: 0;
+    overflow: hidden;
+    display: block;
+    transition: transform 0.1s;
+    box-shadow: 2px 3px 4px gray;
+}
+.card div { }
+
+.card { cursor: pointer;transform: scale(1,1); }
+.card.flipped { cursor: default; transform: scale(-1,1); box-shadow:none }
+.cards-available .card { cursor: pointer; }
+
+.cards-stacked .card { cursor: default }
+.cards-stacked .card:last-child { cursor:pointer }
+.cards-stacked .card-column { width: 10.58em; }
+.cards-stacked .card-column { display: flex }
+.cards-stacked .card { margin: 0; margin-right: -0.3em }
+.cards-stacked .card { display: none }
+.cards-stacked .card:nth-last-child(3) { display: block }
+.cards-stacked .card:nth-last-child(2) { display: block }
+.cards-stacked .card:nth-last-child(1) { display: block }
+
+/*
+.hint { background-color: yellow }
+*/
+
+.card-column .card:last-child { cursor:pointer }
+
+
+.card.flipped div { display: none }
+.cards-table { height: 100vh }
+.cards-table .card { margin-bottom:-1.1em }
+.cards-table .card.flipped { margin-bottom:-1.4em }
+.icon { font-size: 0.75em; display: block; margin-top:-0.25em }
+
+
+.cards-available .card-column { height: 64px; }
+.cards-available .card { position: absolute; margin: 0; }
+.cards-available .card-column:empty { opacity: 0.2;}
+.cards-available .card-column:empty:before { content: "⟳"; font-size: 4.5em }
+
+.cards-removed .card-column { height: 64px; }
+.cards-removed .card { position: absolute; margin: 0; }
+
+.droparea:-moz-drag-over { opacity: 0.5; }

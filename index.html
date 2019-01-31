@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<title>js-solitaire</title>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script src="utilities.js"></script>
+<script src="card.js"></script>
+<script src="game.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    setup();
+});
+</script>
+</head>
+<body class="noselect">
+    <div class="game">
+        <div class="nav">
+            <h3>js-solitaire</h3>
+            <div class="options">
+                <div><a id="mute" href="#">&#x2610; Mute</a></div>
+                <div><a id="reset" href="#">Reset</a></div>
+                <!--<div><a id="hint" href="#">Hint</a></div>-->
+            </div>
+        </div>
+        <div class="top">
+            <div class="cards-removed">
+                <div class="card-column card-column-1"></div>
+                <div class="card-column card-column-2"></div>
+                <div class="card-column card-column-3"></div>
+                <div class="card-column card-column-4"></div>
+            </div>
+            <div class="cards-available-all">
+                <div class="cards-stacked">
+                    <div class="card-column"></div>
+                </div>
+                <div class="cards-available">
+                    <div class="card-column"></div>
+                </div>
+            </div>
+        </div>
+        <div class="cards-table">
+            <div class="card-column card-column-1">&nbsp;</div>
+            <div class="card-column card-column-2">&nbsp;</div>
+            <div class="card-column card-column-3">&nbsp;</div>
+            <div class="card-column card-column-4">&nbsp;</div>
+            <div class="card-column card-column-5">&nbsp;</div>
+            <div class="card-column card-column-6">&nbsp;</div>
+            <div class="card-column card-column-7">&nbsp;</div>
+        </div>
+    </div>
+</body>
+</html>
