@@ -315,7 +315,6 @@ Card.prototype.draw = function() {
     var suits_s = [ "&spades;", "&hearts;", "&clubs;", "&diams;" ];
 
     this.div.classList.add("suit-" + suits[this.suit]);
-
     this.sym = this.num + 1;
     switch( this.num + 1 ) {
         case 1: this.sym = "A"; break;
@@ -324,6 +323,7 @@ Card.prototype.draw = function() {
         case 13: this.sym = "K"; break;
     }
 
+    this.div.classList.add("card-" + this.sym);
     sym.innerHTML = this.sym;
     sym2.innerHTML = suits_s[this.suit];
     sym2.classList.add("icon");
