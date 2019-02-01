@@ -2,7 +2,7 @@
 function Card() {
     this.flipped = true;
     this.num = 0; // 0 - 12
-    this.suit = 0; // 0-s  1-d  2-c   3-h
+    this.suit = 0; // 0-spade  1-heart  2-clubs   3-diamond
 }
 
 Card.prototype.flip = function() {
