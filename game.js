@@ -51,10 +51,6 @@ function game_win() {
     }, 10);
 }
 
-// setTimeout(function() {
-//     game_win();
-// }, 200);
-
 function create_deck() {
     for( var i = 0; i < 13; i++ ) {
         for( var s = 0; s < 4; s++ ) {
@@ -101,7 +97,7 @@ function lay_starting_cards() {
 function lay_3_cards() {
     var destination = __e(".cards-stacked .card-column")[0];
 
-    for( var i = 0; i < 3; i++ )(function(delay_num) {
+    for( var i = 3; i > 0; i-- )(function(delay_num) {
         var a = place_card(destination);
         if( a !== false ) {
             setTimeout( function() {
