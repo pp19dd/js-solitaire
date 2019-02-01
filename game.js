@@ -11,7 +11,7 @@ var end_game_interval;
 function sound_init() {
     sounds.sound_ok = new Audio('assets/win.wav');
     sounds.sound_jump = new Audio('assets/jump.wav');
-    /* sounds.sound_explosion = new Audio('assets/explosion.wav'); */
+    sounds.sound_explosion = new Audio('assets/explosion.wav');
     sounds.sound_powerup = new Audio('assets/powerup.wav');
     sounds.sound_3more = new Audio('assets/3more.wav');
 }
@@ -165,6 +165,7 @@ function game_reset() {
         all_cards[i].draw();
     }
     lay_starting_cards();
+    sound_play("sound_explosion");
 }
 
 function setup() {
