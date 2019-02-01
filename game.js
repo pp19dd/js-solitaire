@@ -6,6 +6,7 @@ var reset_available_cards_on_click = false;
 var touching = false;
 var game_over = false;
 var muted;
+var end_game_interval;
 
 function sound_init() {
     sounds.sound_ok = new Audio('assets/win.wav');
@@ -31,7 +32,7 @@ function game_win() {
         e.__dr = (Math.random() * 2) - 1;
     });
 
-    setInterval(function() {
+    end_game_interval = setInterval(function() {
         __e(".card", function(e, index) {
 
             e.__x += e.__dx;
@@ -154,6 +155,9 @@ function setup_options() {
 }
 
 function game_reset() {
+    clearInterval(end_game_interval);
+    game_over = false;
+
     __e(".card", function(e) {
         e.remove();
     });
