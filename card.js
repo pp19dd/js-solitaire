@@ -39,6 +39,8 @@ Card.prototype.getPosition = function() {
 }
 
 Card.prototype.checkWin = function() {
+    move_after();
+
     var card_count = __e(".cards-removed .card");
     if( card_count.length === 52 ) {
         game_win();
@@ -303,7 +305,7 @@ Card.prototype.canDrop4 = function(uppers) {
     return( true );
 }
 
-Card.prototype.draw = function() {
+Card.prototype.draw = function(skip_drawing) {
     this.div = document.createElement("div");
     var sym = document.createElement("div");
     var sym2 = document.createElement("div");
@@ -360,5 +362,9 @@ Card.prototype.draw = function() {
     //     that.hint(false);
     // });
 
-    anchor.appendChild(this.div);
+    if( skip_drawing !== true ) {
+        anchor.appendChild(this.div);
+    } else {
+        return( this.div );
+    }
 }

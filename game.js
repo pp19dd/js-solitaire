@@ -7,6 +7,56 @@ var touching = false;
 var game_over = false;
 var muted;
 var end_game_interval;
+var moves = [];
+var shuffle_times = 5000;
+
+function encode_deck() {
+    var ret = [];
+    __e(".card-column", function(col, index1) {
+        var temp_col = [];
+        __e(".card", col, function(card, index2) {
+            temp_col.push({
+                suit: card.__entity.suit,
+                num: card.__entity.num,
+                flipped: card.__entity.flipped
+            });
+        });
+        ret.push( temp_col );
+    });
+    return( ret );
+}
+
+function move_after() {
+    moves.push( encode_deck() );
+    // console.info( moves );
+}
+
+function move_undo() {
+    if( game_over ) return;
+
+    var last = moves.pop();
+    if( typeof last === "undefined") {
+        console.info( "no last?");
+        return;
+    }
+    __e(".card", function(e) {
+        e.remove();
+    });
+
+    var cols = __e(".card-column");
+
+    for( var j in last ) {
+        for( var i in last[j] ) {
+            var temp = new Card();
+            temp.num = last[j][i].num;
+            temp.suit = last[j][i].suit;
+            var node = temp.draw(true);
+            if( !last[j][i].flipped ) temp.flip();
+
+            cols[j].append(node);
+        }
+    }
+}
 
 function sound_init() {
     sounds.sound_ok = new Audio('assets/win.wav');
@@ -105,6 +155,8 @@ function lay_3_cards() {
             }, delay_num);
         }
     })(i * 33);
+
+    move_after();
 }
 
 function setup_options() {
@@ -112,14 +164,14 @@ function setup_options() {
     var links = __e(".nav a");
 
     function mute() {
-        links[0].innerHTML = "&#x2611; Mute";
+        links[1].innerHTML = "&#x2611; Mute";
         localStorage["js-solitaire-muted"] = "yes";
         muted = true;
     }
 
     function unmute() {
         muted = false;
-        links[0].innerHTML = "&#x2610; Mute";
+        links[1].innerHTML = "&#x2610; Mute";
         localStorage["js-solitaire-muted"] = "no";
     }
 
@@ -134,8 +186,12 @@ function setup_options() {
     } else {
         unmute();
     }
-
     links[0].addEventListener("click", function(e) {
+        move_undo();
+        e.preventDefault();
+    });
+
+    links[1].addEventListener("click", function(e) {
         if( muted ) {
             unmute();
         } else {
@@ -144,7 +200,7 @@ function setup_options() {
         e.preventDefault();
     });
 
-    links[1].addEventListener("click", function(e) {
+    links[2].addEventListener("click", function(e) {
         game_reset();
         e.preventDefault();
     });
@@ -158,14 +214,16 @@ function game_reset() {
         e.remove();
     });
     all_cards = [];
+    moves = [];
 
     create_deck();
-    shuffle(all_cards);
+    shuffle(all_cards, shuffle_times);
     for( var i = 0; i < all_cards.length; i++ ) {
         all_cards[i].draw();
     }
     lay_starting_cards();
     sound_play("sound_explosion");
+    move_after();
 }
 
 function setup() {
@@ -175,12 +233,13 @@ function setup() {
     setup_options();
 
     // shuffle it
-    shuffle(all_cards);
+    shuffle(all_cards, shuffle_times);
     for( var i = 0; i < all_cards.length; i++ ) {
         all_cards[i].draw();
     }
 
     lay_starting_cards();
+    move_after();
 
     __e(".cards-table .card-column", function(col, index) {
         col.addEventListener("dragover", function(e) {
