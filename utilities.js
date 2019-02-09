@@ -18,20 +18,19 @@ function __e(selector, node, delta) {
     if( typeof node === "function" ) __e_iterate(ret, node);
     if( typeof delta === "function" ) __e_iterate(ret, delta);
 
-    return( ret );
+    return( Array.from(ret) );
 }
 
 
-function shuffle(arr) {
+function shuffle(arr, times) {
     function move(arr, fromIndex, toIndex) {
         var element = arr[fromIndex];
         arr.splice(fromIndex, 1);
         arr.splice(toIndex, 0, element);
     }
-    for( var i = 0; i < arr.length; i++ ) {
+    for( var i = 0; i < times; i++ ) {
         var r_from = parseInt(Math.random() * arr.length);
         var r_to = parseInt(Math.random() * arr.length);
         move( arr, r_from, r_to );
     }
-
 }
