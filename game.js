@@ -1,4 +1,5 @@
 
+var drake;
 var dragged;
 var all_cards = [];
 var sounds = {};
@@ -28,7 +29,6 @@ function encode_deck() {
 
 function move_after() {
     moves.push( encode_deck() );
-    // console.info( moves );
 }
 
 function move_undo() {
@@ -36,7 +36,6 @@ function move_undo() {
 
     var last = moves.pop();
     if( typeof last === "undefined") {
-        console.info( "no last?");
         return;
     }
     __e(".card", function(e) {
@@ -241,65 +240,147 @@ function setup() {
     lay_starting_cards();
     move_after();
 
-    __e(".cards-table .card-column", function(col, index) {
-        col.addEventListener("dragover", function(e) {
-            if( game_over ) return;
+    drake = dragula({
+        containers: __e(".card-column"),
+        accepts: function(dragged_card, target_column, source_column, sibling) {
+            if( game_over ) return( false );
 
-            e.preventDefault();
-            return(false);
-        });
+            // can only drop onto the end of a stack
+            if( sibling !== null ) return( false );
 
-        col.addEventListener("drop", function(e) {
-            if( game_over ) return;
+            // 7-col rules
+            if( target_column.parentNode.classList.contains("cards-table") ) {
 
-            var uppers = __e(".card",col);
-            var lower = dragged;
-            var pos = dragged.__entity.getPosition();
+                var uppers = __e(".card", target_column);
+                var pos = dragged_card.__entity.getPosition();
+                var can_drop = dragged_card.__entity.canDrop7(uppers);
 
-            var can_drop = lower.__entity.canDrop7(uppers);
-            if( can_drop === false ) return;
+                if( can_drop === false ) return( false );
 
-            col.append( dragged );
+                // todo: this pulls cards below, right?
+                // dragged_card.__entity.afterDrop7(target_column, pos);
 
-            dragged.__entity.afterDrop7(col, pos);
-
-            // if old column is empty, not a good sign
-            var count_cards = __e(".card", pos.column);
-
-            switch( count_cards.length ) {
-                // case 0: sounds.sound_explosion.play(); break;
-                case 1: sound_play("sound_powerup"); break;
-                default: sound_play("sound_jump"); break;
+                return( true );
             }
 
-            dragged = null;
-        });
+            // 4-col rules
+            if( target_column.parentNode.classList.contains("cards-removed") ) {
+
+                var uppers = __e(".card", target_column);
+                var can_drop = dragged_card.__entity.canDrop4(uppers);
+                if( can_drop === false ) return( false );
+
+                return( true );
+            }
+
+            return( false );
+        },
+        moves: function(el, source, handle, sibling) {
+            if( game_over ) return( false );
+
+            // can't move an unknown card
+            if( el.__entity.flipped ) return( false );
+
+            return( true );
+        }
+    });
+
+    drake.on("drop", function(dragged_card, target_column, source_column, sibling) {
+
+        var pos = dragged_card.__entity.getPosition();
+        dragged_card.__entity.afterDrop7(target_column, pos);
+
+        // if old column is empty, not a good sign
+        var count_cards = __e(".card", pos.column);
+
+        switch( count_cards.length ) {
+            // case 0: sounds.sound_explosion.play(); break;
+            case 1: sound_play("sound_powerup"); break;
+            default: sound_play("sound_jump"); break;
+        }
+        //drake.cancel(true);
+    });
+
+    // dragula(__e(".card-column"), {
+    //     accepts: function(dragged_card, target_column, source_column) {
+    //         if( target_column === source_column ) {
+    //             drake.cancel(true);
+    //         }
+    //         if( dragged_card.__entity.flipped ) return( false );
+    //         return( true );
+    //     },
+    // });
+
+    //drake = dragula();
+    // console.info( drake.containers );
+    //drake.containers.push( __e(".cards-table .card-column"));
+    // console.info( drake.containers );
+
+
+    // drake.on("drag", function(e, src) {
+    //     console.info( e );
+    // });
+
+    /*
+    __e(".cards-table .card-column", function(col, index) {
+        // col.addEventListener("dragover", function(e) {
+        //     if( game_over ) return;
+
+        //     e.preventDefault();
+        //     return(false);
+        // });
+
+        // col.addEventListener("drop", function(e) {
+        //     if( game_over ) return;
+
+        //     var uppers = __e(".card",col);
+        //     var lower = dragged;
+        //     var pos = dragged.__entity.getPosition();
+
+        //     var can_drop = lower.__entity.canDrop7(uppers);
+        //     if( can_drop === false ) return;
+
+        //     col.append( dragged );
+
+        //     dragged.__entity.afterDrop7(col, pos);
+
+        //     // if old column is empty, not a good sign
+        //     var count_cards = __e(".card", pos.column);
+
+        //     switch( count_cards.length ) {
+        //         // case 0: sounds.sound_explosion.play(); break;
+        //         case 1: sound_play("sound_powerup"); break;
+        //         default: sound_play("sound_jump"); break;
+        //     }
+
+        //     dragged = null;
+        // });
     });
 
     __e(".cards-removed .card-column", function(col, index) {
-        col.addEventListener("dragover", function(e) {
-            if( game_over ) return;
+        // col.addEventListener("dragover", function(e) {
+        //     if( game_over ) return;
 
-            e.preventDefault();
-            return(false);
-        });
+        //     e.preventDefault();
+        //     return(false);
+        // });
 
-        col.addEventListener("drop", function(e) {
-            if( game_over ) return;
+        // col.addEventListener("drop", function(e) {
+        //     if( game_over ) return;
 
-            var uppers = __e(".card", col);
-            var lower = dragged;
-            var pos = dragged.__entity.getPosition();
+        //     var uppers = __e(".card", col);
+        //     var lower = dragged;
+        //     var pos = dragged.__entity.getPosition();
 
-            var can_drop = lower.__entity.canDrop4(uppers);
-            if( can_drop === false ) return;
+        //     var can_drop = lower.__entity.canDrop4(uppers);
+        //     if( can_drop === false ) return;
 
-            col.append( dragged );
-            sound_play("sound_ok");
-            dragged.__entity.afterDrop4(col, pos);
-        });
+        //     col.append( dragged );
+        //     sound_play("sound_ok");
+        //     dragged.__entity.afterDrop4(col, pos);
+        // });
     });
-
+    */
 
     var right_col = __e(".cards-available .card-column")[0];
     right_col.addEventListener("click", function() {

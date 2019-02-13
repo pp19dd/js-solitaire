@@ -16,13 +16,12 @@ Card.prototype.flip = function() {
         this.div.draggable = "false";
     }
 
-    var that = this;
-    this.div.addEventListener("dragstart", function(e) {
-        if( game_over ) return;
-
-        e.dataTransfer.setData("text/html", that.div);
-        dragged = that.div;
-    });
+    // var that = this;
+    // this.div.addEventListener("dragstart", function(e) {
+    //     if( game_over ) return;
+    //     e.dataTransfer.setData("text/html", that.div);
+    //     dragged = that.div;
+    // });
 }
 
 Card.prototype.getPosition = function() {
